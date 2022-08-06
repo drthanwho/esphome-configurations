@@ -1,4 +1,5 @@
 substitutions:
+  name: bw-shp2
   devicename: bw_shp2
   friendly_name: BlitzWolf BW-SHP2 Plug
   device_description: BlitzWolf BW-SHP2 Power Monitoring Plug with button, Red and Blue led.
@@ -21,12 +22,12 @@ ota:
 wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: ${upper_devicename} Hotspot
+    ssid: ${devicename} Hotspot
     password: ${wifi_ap_password}
 captive_portal:
 
 esphome:
-  name: ${devicename}
+  name: ${name}
   comment: ${device_description}
   
 dashboard_import:
@@ -77,7 +78,7 @@ sensor:
     unit_of_measurement: kWh
 
   - platform: wifi_signal
-    name: $upper_devicename WiFi Signal
+    name: ${friendly_name} WiFi Signal
     update_interval: 5s
     filters:
       - sliding_window_moving_average:
@@ -86,12 +87,12 @@ sensor:
           send_first_at: 15
 
   - platform: uptime
-    name: $upper_devicename Uptime Sensor
+    name: ${friendly_name} Uptime Sensor
     id: sensor_uptime
 
   - platform: template
     id: sensor_uptime_timestamp
-    name: "$upper_devicename Uptime"
+    name: ${friendly_name} Uptime
     device_class: timestamp
     entity_category: diagnostic
     accuracy_decimals: 0
@@ -114,12 +115,12 @@ binary_sensor:
     on_press:
       - switch.toggle: relay
   - platform: status
-    name: $upper_devicename Status
+    name: ${friendly_name} Status
 
 switch:
 # Relay itself
   - platform: gpio
-    name: ${friendly_name}
+    name: ${friendly_name} Relay
     pin: GPIO14
     id: relay
     restore_mode: RESTORE_DEFAULT_OFF #Try to restore relay state after reboot/power-loss event.
